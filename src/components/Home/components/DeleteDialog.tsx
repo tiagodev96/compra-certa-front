@@ -19,6 +19,11 @@ interface DeleteDialogProps {
 export const DeleteDialog = ({ removeItem, index }: DeleteDialogProps) => {
   const [open, setOpen] = useState(false);
 
+  const handleDelete = () => {
+    removeItem(index);
+    setOpen(false);
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -36,11 +41,13 @@ export const DeleteDialog = ({ removeItem, index }: DeleteDialogProps) => {
         <DialogFooter>
           <Button
             className="bg-red-500 hover:bg-red-800"
-            onClick={() => removeItem(index)}
+            onClick={handleDelete}
           >
             Sim
           </Button>
-          <Button className="bg-gray-600">Não</Button>
+          <Button className="bg-gray-600" onClick={() => setOpen(false)}>
+            Não
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
