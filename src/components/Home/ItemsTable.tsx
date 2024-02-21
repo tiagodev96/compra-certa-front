@@ -12,6 +12,7 @@ import {
 import { Separator } from "../ui/separator";
 import { Trash } from "lucide-react";
 import { Show } from "..";
+import { DeleteDialog } from "./components/DeleteDialog";
 
 interface Item {
   name: string;
@@ -25,9 +26,21 @@ interface ItemsTableProps {
 }
 
 export const ItemsTable = ({ items, removeItem }: ItemsTableProps) => {
-  const totalValueSum = items
-    .reduce((acc, item) => acc + item.value * item.amount, 0)
-    .toFixed(2);
+  let totalValueSum = items.reduce(
+    (acc, item) => acc + item.value * item.amount,
+    0,
+  );
+
+  const formatValue = (value: number | string) => {
+    if (typeof value === "string") {
+      value = parseFloat(value);
+    }
+
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(value);
+  };
 
   const renderItems = () =>
     items.map((item, index) => (
@@ -35,14 +48,9 @@ export const ItemsTable = ({ items, removeItem }: ItemsTableProps) => {
         <TableCell className="font-medium">{index + 1}</TableCell>
         <TableCell>{item.name}</TableCell>
         <TableCell>{item.amount}</TableCell>
-        <TableCell className="text-right">R$ {item.value}</TableCell>
+        <TableCell className="text-right">{formatValue(item.value)}</TableCell>
         <TableCell>
-          <Trash
-            className="mx-auto cursor-pointer hover:text-red-500 transition-all"
-            size={20}
-            strokeWidth={2}
-            onClick={() => removeItem(index)}
-          />
+          <DeleteDialog index={index} removeItem={removeItem} />
         </TableCell>
       </TableRow>
     ));
@@ -72,7 +80,7 @@ export const ItemsTable = ({ items, removeItem }: ItemsTableProps) => {
         <TableRow>
           <TableHead className="w-[100px]">Item</TableHead>
           <TableHead>Nome</TableHead>
-          <TableHead>Quantidade</TableHead>
+          <TableHead>Qtde.</TableHead>
           <TableHead className="text-right">Valor</TableHead>
           <TableHead className="text-center">Remover</TableHead>
         </TableRow>
@@ -91,7 +99,7 @@ export const ItemsTable = ({ items, removeItem }: ItemsTableProps) => {
             Total
           </TableCell>
           <TableCell colSpan={2} className="text-right font-bold">
-            R$ {totalValueSum}
+            {formatValue(totalValueSum)}
           </TableCell>
         </TableRow>
       </TableFooter>
