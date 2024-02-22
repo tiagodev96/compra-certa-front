@@ -79,72 +79,63 @@ export const ItemsTable = ({
           {index + 1}
         </TableCell>
         <TableCell>{item.name}</TableCell>
-        <TableCell className="flex flex-row items-center gap-x-2 sm:gap-x-3">
-          <button
-            className="bg-gray-900 hidden sm:flex text-white rounded-full"
-            onClick={() => handleAmountChange(index, -1)}
-          >
-            <Minus size={24} strokeWidth={2} />
-          </button>
-          {item.amount}
-          <button
-            className="bg-gray-900 text-white hidden sm:flex rounded-full"
-            onClick={() => handleAmountChange(index, 1)}
-          >
-            <Plus size={24} strokeWidth={2} />
-          </button>
+        <TableCell>
+          <div className="flex flex-row space-x-2 sm:space-x-3">
+            <button
+              className="bg-gray-900 hidden sm:flex text-white rounded-full"
+              onClick={() => handleAmountChange(index, -1)}
+            >
+              <Minus size={24} strokeWidth={2} />
+            </button>
+            <p>{item.amount}</p>
+            <button
+              className="bg-gray-900 text-white hidden sm:flex rounded-full"
+              onClick={() => handleAmountChange(index, 1)}
+            >
+              <Plus size={24} strokeWidth={2} />
+            </button>
+          </div>
         </TableCell>
         <TableCell className="text-right">{formatValue(item.value)}</TableCell>
-        <TableCell className="flex flex-row justify-center gap-x-1 sm:gap-x-2">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button onClick={() => handleDeleteClick(index)}>
-                  <Trash
-                    className="cursor-pointer hover:text-red-500 transition-all"
-                    size={20}
-                    strokeWidth={2}
-                  />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent className="bg-slate-900 text-white">
-                <p>Remover item</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <DeleteDialog
-            open={openDeleteDialog}
-            setOpen={setOpenDeleteDialog}
-            index={itemToDelete}
-            removeItem={removeItem}
-          />
+        <TableCell>
+          <div className="flex flex-row items-center justify-center space-x-1 sm:space-x-2">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    className="flex items-center"
+                    onClick={() => handleDeleteClick(index)}
+                  >
+                    <Trash
+                      className="cursor-pointer hover:text-red-500 transition-all"
+                      size={20}
+                      strokeWidth={2}
+                    />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent className="bg-slate-900 text-white">
+                  <p>Remover item</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button onClick={() => handleEditClick(index)}>
-                  <Pencil
-                    className="cursor-pointer hover:text-slate-500 transition-all"
-                    size={20}
-                    strokeWidth={2}
-                  />
-                </button>
-              </TooltipTrigger>
-              <TooltipContent className="bg-slate-900 text-white">
-                <p>Editar item</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <EditDialog
-            item={itemToEdit}
-            updateItem={(item) => {
-              if (itemToEditIndex !== null) {
-                updateItem(itemToEditIndex, item);
-              }
-            }}
-            open={openEditDialog}
-            setOpen={setOpenEditDialog}
-          />
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button onClick={() => handleEditClick(index)}>
+                    <Pencil
+                      className="cursor-pointer hover:text-slate-500 transition-all"
+                      size={20}
+                      strokeWidth={2}
+                    />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent className="bg-slate-900 text-white">
+                  <p>Editar item</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </TableCell>
       </TableRow>
     ));
@@ -197,6 +188,23 @@ export const ItemsTable = ({
           </TableCell>
         </TableRow>
       </TableFooter>
+
+      <DeleteDialog
+        open={openDeleteDialog}
+        setOpen={setOpenDeleteDialog}
+        index={itemToDelete}
+        removeItem={removeItem}
+      />
+      <EditDialog
+        item={itemToEdit}
+        updateItem={(item) => {
+          if (itemToEditIndex !== null) {
+            updateItem(itemToEditIndex, item);
+          }
+        }}
+        open={openEditDialog}
+        setOpen={setOpenEditDialog}
+      />
     </Table>
   );
 };

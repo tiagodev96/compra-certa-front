@@ -72,7 +72,7 @@ export function ItemDialog({ addItem, open, setOpen }: ItemDialogProps) {
     value: string,
     setValue: (value: string) => void,
     label: string,
-    type: string = "text",
+    type: string = "text"
   ) => (
     <div className="grid grid-cols-4 items-center gap-4">
       <Label htmlFor={id} className="text-right">
@@ -82,6 +82,7 @@ export function ItemDialog({ addItem, open, setOpen }: ItemDialogProps) {
         id={id}
         type={type}
         value={value}
+        inputMode={type === "number" ? "numeric" : "text"}
         onChange={(e) => setValue(e.target.value)}
         className="col-span-3"
         required
