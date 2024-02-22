@@ -56,7 +56,7 @@ export function ItemDialog({ addItem, open, setOpen }: ItemDialogProps) {
       </DialogHeader>
       <div className="grid gap-4 py-4">
         {renderInput("name", name, setName, "Nome")}
-        {renderInput("amount", amount, setAmount, "Quantidade", "number")}
+        {renderInput("amount", amount, setAmount, "Quantidade", "integer")}
         {renderInput("price", price, setPrice, "Preço", "number")}
       </div>
       <DialogFooter>
@@ -82,7 +82,13 @@ export function ItemDialog({ addItem, open, setOpen }: ItemDialogProps) {
         id={id}
         type={type}
         value={value}
-        inputMode={type === "number" ? "decimal" : "text"}
+        inputMode={
+          type === "number"
+            ? "decimal"
+            : type === "integer"
+              ? "numeric"
+              : "text"
+        }
         onChange={(e) => {
           const value = e.target.value;
 
