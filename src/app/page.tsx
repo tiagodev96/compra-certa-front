@@ -2,8 +2,10 @@
 import { Header, ItemDialog, ItemsTable } from "@/components";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/components/ui/use-toast";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { use, useState } from "react";
 
 export interface Item {
   name: string;
@@ -14,6 +16,7 @@ export interface Item {
 export default function Home() {
   const [items, setItems] = useState<Item[]>([]);
   const [open, setOpen] = useState(false);
+  const { toast } = useToast();
 
   const handleAddItem = (item: Item) => {
     setItems((prev) => [...prev, item]);
@@ -22,6 +25,14 @@ export default function Home() {
 
   const handleRemoveItem = (index: number) => {
     setItems((prev) => prev.filter((_, i) => i !== index));
+    const itemName = items[index].name;
+    const itemFormatted = itemName.charAt(0).toUpperCase() + itemName.slice(1);
+
+    toast({
+      description: `${itemFormatted} removido com sucesso!`,
+      variant: "success",
+      duration: 2000,
+    });
   };
 
   const handleUpdateItem = (index: number, newItem: Item) => {
@@ -82,6 +93,8 @@ export default function Home() {
           <Plus size={36} color="white" />
         </button>
       </div>
+
+      <Toaster />
     </main>
   );
 }

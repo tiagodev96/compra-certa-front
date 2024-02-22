@@ -42,6 +42,7 @@ export const DeleteDialog = ({
           >
             Sim
           </Button>
+
           <Button className="bg-gray-600" onClick={() => setOpen(false)}>
             Não
           </Button>
