@@ -59,7 +59,7 @@ export function EditDialog({
     value: string,
     setValue: (value: string) => void,
     label: string,
-    type: string = "text",
+    type: string = "text"
   ) => (
     <div className="grid grid-cols-4 items-center gap-4">
       <Label htmlFor={id} className="text-right">
@@ -69,8 +69,23 @@ export function EditDialog({
         id={id}
         type={type}
         value={value}
-        onChange={(e) => setValue(e.target.value)}
-        className="col-span-3"
+        inputMode={
+          type === "number"
+            ? "decimal"
+            : type === "integer"
+              ? "numeric"
+              : "text"
+        }
+        onChange={(e) => {
+          const value = e.target.value;
+
+          if (type === "number" && isNaN(parseFloat(value))) {
+            return;
+          }
+
+          setValue(e.target.value);
+        }}
+        className="col-span-3 text-lg"
         required
       />
     </div>
@@ -84,7 +99,7 @@ export function EditDialog({
         </DialogHeader>
         <div className="grid gap-4 py-4">
           {renderInput("name", name, setName, "Nome")}
-          {renderInput("amount", amount, setAmount, "Quantidade", "number")}
+          {renderInput("amount", amount, setAmount, "Quantidade", "integer")}
           {renderInput("price", price, setPrice, "Preço", "number")}
         </div>
         <DialogFooter>
