@@ -12,24 +12,23 @@ export interface Item {
 export default function Home() {
   const [items, setItems] = useState<Item[]>([]);
 
-  const addItem = (item: Item) => {
+  const handleAddItem = (item: Item) => {
     setItems((prev) => [...prev, item]);
   };
 
-  const removeItem = (index: number) => {
+  const handleRemoveItem = (index: number) => {
     setItems((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const updateItem = (index: number, newItem: Item) => {
+  const handleUpdateItem = (index: number, newItem: Item) => {
     setItems((prev) => prev.map((item, i) => (i === index ? newItem : item)));
   };
 
-  let totalValueSum = items.reduce(
-    (acc, item) => acc + item.value * item.amount,
-    0,
-  );
+  const calculateTotalValueSum = (items: Item[]) => {
+    return items.reduce((acc, item) => acc + item.value * item.amount, 0);
+  };
 
-  const formatValue = (value: number | string) => {
+  const formatCurrencyValue = (value: number | string) => {
     if (typeof value === "string") {
       value = parseFloat(value);
     }
@@ -40,6 +39,8 @@ export default function Home() {
     }).format(value);
   };
 
+  const totalValueSum = calculateTotalValueSum(items);
+
   return (
     <main>
       <Header />
@@ -49,17 +50,19 @@ export default function Home() {
           <Card>
             <CardContent className="p-2 bg-slate-900 text-slate-100 rounded-md flex flex-row gap-x-2 justify-center items-center">
               <h2 className="text-sm font-bold">Total</h2>
-              <p className="text-sm font-bold">{formatValue(totalValueSum)}</p>
+              <p className="text-sm font-bold">
+                {formatCurrencyValue(totalValueSum)}
+              </p>
             </CardContent>
           </Card>
-          <ItemDialog addItem={addItem} />
+          <ItemDialog addItem={handleAddItem} />
         </div>
         <ItemsTable
           items={items}
-          removeItem={removeItem}
-          updateItem={updateItem}
+          removeItem={handleRemoveItem}
+          updateItem={handleUpdateItem}
           totalValueSum={totalValueSum}
-          formatValue={formatValue}
+          formatValue={formatCurrencyValue}
         />
       </div>
     </main>
