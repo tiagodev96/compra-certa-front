@@ -82,9 +82,17 @@ export function ItemDialog({ addItem, open, setOpen }: ItemDialogProps) {
         id={id}
         type={type}
         value={value}
-        inputMode={type === "number" ? "numeric" : "text"}
-        onChange={(e) => setValue(e.target.value)}
-        className="col-span-3"
+        inputMode={type === "number" ? "decimal" : "text"}
+        onChange={(e) => {
+          const value = e.target.value;
+
+          if (type === "number" && isNaN(parseFloat(value))) {
+            return;
+          }
+
+          setValue(e.target.value);
+        }}
+        className="col-span-3 text-lg"
         required
       />
     </div>
