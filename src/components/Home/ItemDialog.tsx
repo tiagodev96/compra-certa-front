@@ -17,10 +17,11 @@ import { useState } from "react";
 
 interface ItemDialogProps {
   addItem: (item: Item) => void;
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }
 
-export function ItemDialog({ addItem }: ItemDialogProps) {
-  const [open, setOpen] = useState(false);
+export function ItemDialog({ addItem, open, setOpen }: ItemDialogProps) {
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [price, setPrice] = useState("");
@@ -43,17 +44,6 @@ export function ItemDialog({ addItem }: ItemDialogProps) {
 
     setOpen(false);
   };
-
-  const renderDialogTrigger = () => (
-    <DialogTrigger asChild>
-      <Button
-        variant="ghost"
-        className="bg-green-400 hover:bg-green-200 hover:border-green-400 border-[1px] flex flex-row items-center gap-x-2"
-      >
-        Adicionar Item <Plus size={18} />
-      </Button>
-    </DialogTrigger>
-  );
 
   const renderDialogContent = () => (
     <DialogContent className="w-[90%] max-w-[425px] min-w-[300px]">
@@ -101,7 +91,6 @@ export function ItemDialog({ addItem }: ItemDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      {renderDialogTrigger()}
       {renderDialogContent()}
     </Dialog>
   );

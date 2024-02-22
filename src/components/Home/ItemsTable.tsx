@@ -48,6 +48,7 @@ export const ItemsTable = ({
 
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [itemToEdit, setItemToEdit] = useState<Item | null>(null);
+  const [itemToEditIndex, setItemToEditIndex] = useState<number | null>(null);
 
   const handleAmountChange = (index: number, delta: number) => {
     const newAmount = items[index].amount + delta;
@@ -67,31 +68,34 @@ export const ItemsTable = ({
 
   const handleEditClick = (index: number) => {
     setItemToEdit(items[index]);
+    setItemToEditIndex(index);
     setOpenEditDialog(true);
   };
 
   const renderItems = () =>
     items.map((item, index) => (
       <TableRow key={index}>
-        <TableCell className="font-medium">{index + 1}</TableCell>
+        <TableCell className="font-medium hidden sm:flex">
+          {index + 1}
+        </TableCell>
         <TableCell>{item.name}</TableCell>
-        <TableCell className="flex flex-row items-center gap-x-3">
+        <TableCell className="flex flex-row items-center gap-x-2 sm:gap-x-3">
           <button
-            className="bg-gray-900 text-white rounded-full"
+            className="bg-gray-900 hidden sm:flex text-white rounded-full"
             onClick={() => handleAmountChange(index, -1)}
           >
             <Minus size={24} strokeWidth={2} />
           </button>
           {item.amount}
           <button
-            className="bg-gray-900 text-white rounded-full"
+            className="bg-gray-900 text-white hidden sm:flex rounded-full"
             onClick={() => handleAmountChange(index, 1)}
           >
             <Plus size={24} strokeWidth={2} />
           </button>
         </TableCell>
         <TableCell className="text-right">{formatValue(item.value)}</TableCell>
-        <TableCell className="flex flex-row justify-center gap-x-2">
+        <TableCell className="flex flex-row justify-center gap-x-1 sm:gap-x-2">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -133,7 +137,11 @@ export const ItemsTable = ({
           </TooltipProvider>
           <EditDialog
             item={itemToEdit}
-            updateItem={(item) => updateItem(index, item)}
+            updateItem={(item) => {
+              if (itemToEditIndex !== null) {
+                updateItem(itemToEditIndex, item);
+              }
+            }}
             open={openEditDialog}
             setOpen={setOpenEditDialog}
           />
@@ -164,11 +172,11 @@ export const ItemsTable = ({
 
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Item</TableHead>
+          <TableHead className="w-[100px] hidden sm:flex">Item</TableHead>
           <TableHead>Nome</TableHead>
-          <TableHead>Qtde.</TableHead>
-          <TableHead className="text-right">Valor</TableHead>
-          <TableHead className="text-center">Ações</TableHead>
+          <TableHead className="w-[100px]">Qtde.</TableHead>
+          <TableHead className="text-right w-[100px]">Valor</TableHead>
+          <TableHead className="text-center w-[100px]">Ações</TableHead>
         </TableRow>
       </TableHeader>
 

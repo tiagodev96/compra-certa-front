@@ -1,6 +1,8 @@
 "use client";
 import { Header, ItemDialog, ItemsTable } from "@/components";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 
 export interface Item {
@@ -11,9 +13,11 @@ export interface Item {
 
 export default function Home() {
   const [items, setItems] = useState<Item[]>([]);
+  const [open, setOpen] = useState(false);
 
   const handleAddItem = (item: Item) => {
     setItems((prev) => [...prev, item]);
+    setOpen(false);
   };
 
   const handleRemoveItem = (index: number) => {
@@ -55,7 +59,14 @@ export default function Home() {
               </p>
             </CardContent>
           </Card>
-          <ItemDialog addItem={handleAddItem} />
+          <Button
+            variant="ghost"
+            className="hidden sm:flex bg-green-400 hover:bg-green-200 hover:border-green-400 border-[1px] flex-row items-center gap-x-2"
+            onClick={() => setOpen(true)}
+          >
+            Adicionar Item <Plus size={18} />
+          </Button>
+          <ItemDialog addItem={handleAddItem} open={open} setOpen={setOpen} />
         </div>
         <ItemsTable
           items={items}
@@ -64,6 +75,12 @@ export default function Home() {
           totalValueSum={totalValueSum}
           formatValue={formatCurrencyValue}
         />
+        <button
+          className="sm:hidden fixed bottom-4 right-[50%] translate-x-[50%] bg-green-500 rounded-full p-2"
+          onClick={() => setOpen(true)}
+        >
+          <Plus size={36} color="white" />
+        </button>
       </div>
     </main>
   );
