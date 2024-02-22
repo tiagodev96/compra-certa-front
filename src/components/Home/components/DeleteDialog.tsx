@@ -6,34 +6,31 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Trash } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
 
 interface DeleteDialogProps {
   removeItem: (index: number) => void;
-  index: number;
+  index: number | null;
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }
 
-export const DeleteDialog = ({ removeItem, index }: DeleteDialogProps) => {
-  const [open, setOpen] = useState(false);
-
+export const DeleteDialog = ({
+  removeItem,
+  index,
+  open,
+  setOpen,
+}: DeleteDialogProps) => {
   const handleDelete = () => {
-    removeItem(index);
+    if (index !== null) {
+      removeItem(index);
+    }
     setOpen(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Trash
-          className="mx-auto cursor-pointer hover:text-red-500 transition-all"
-          size={20}
-          strokeWidth={2}
-        />
-      </DialogTrigger>
-
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Deseja realmente excluir o item?</DialogTitle>

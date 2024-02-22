@@ -10,9 +10,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Separator } from "../ui/separator";
-import { Trash } from "lucide-react";
+import { Minus, Pencil, Plus, Trash } from "lucide-react";
 import { Show } from "..";
 import { DeleteDialog } from "./components/DeleteDialog";
+import { useState } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
+import { EditDialog } from "./components/EditDialog";
 
 interface Item {
   name: string;
@@ -23,23 +31,43 @@ interface Item {
 interface ItemsTableProps {
   items: Item[];
   removeItem: (index: number) => void;
+  updateItem: (index: number, item: Item) => void;
+  totalValueSum: number;
+  formatValue: (value: number | string) => string;
 }
 
-export const ItemsTable = ({ items, removeItem }: ItemsTableProps) => {
-  let totalValueSum = items.reduce(
-    (acc, item) => acc + item.value * item.amount,
-    0,
-  );
+export const ItemsTable = ({
+  items,
+  removeItem,
+  updateItem,
+  formatValue,
+  totalValueSum,
+}: ItemsTableProps) => {
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<number | null>(null);
 
-  const formatValue = (value: number | string) => {
-    if (typeof value === "string") {
-      value = parseFloat(value);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [itemToEdit, setItemToEdit] = useState<Item | null>(null);
+
+  const handleAmountChange = (index: number, delta: number) => {
+    const newAmount = items[index].amount + delta;
+    if (newAmount === 0) {
+      setOpenDeleteDialog(true);
+      setItemToDelete(index);
+    } else {
+      const newItem = { ...items[index], amount: newAmount };
+      updateItem(index, newItem);
     }
+  };
 
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(value);
+  const handleDeleteClick = (index: number) => {
+    setItemToDelete(index);
+    setOpenDeleteDialog(true);
+  };
+
+  const handleEditClick = (index: number) => {
+    setItemToEdit(items[index]);
+    setOpenEditDialog(true);
   };
 
   const renderItems = () =>
@@ -47,10 +75,68 @@ export const ItemsTable = ({ items, removeItem }: ItemsTableProps) => {
       <TableRow key={index}>
         <TableCell className="font-medium">{index + 1}</TableCell>
         <TableCell>{item.name}</TableCell>
-        <TableCell>{item.amount}</TableCell>
+        <TableCell className="flex flex-row items-center gap-x-3">
+          <button
+            className="bg-gray-900 text-white rounded-full"
+            onClick={() => handleAmountChange(index, -1)}
+          >
+            <Minus size={24} strokeWidth={2} />
+          </button>
+          {item.amount}
+          <button
+            className="bg-gray-900 text-white rounded-full"
+            onClick={() => handleAmountChange(index, 1)}
+          >
+            <Plus size={24} strokeWidth={2} />
+          </button>
+        </TableCell>
         <TableCell className="text-right">{formatValue(item.value)}</TableCell>
-        <TableCell>
-          <DeleteDialog index={index} removeItem={removeItem} />
+        <TableCell className="flex flex-row justify-center gap-x-2">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button onClick={() => handleDeleteClick(index)}>
+                  <Trash
+                    className="cursor-pointer hover:text-red-500 transition-all"
+                    size={20}
+                    strokeWidth={2}
+                  />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent className="bg-slate-900 text-white">
+                <p>Remover item</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <DeleteDialog
+            open={openDeleteDialog}
+            setOpen={setOpenDeleteDialog}
+            index={itemToDelete}
+            removeItem={removeItem}
+          />
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button onClick={() => handleEditClick(index)}>
+                  <Pencil
+                    className="cursor-pointer hover:text-slate-500 transition-all"
+                    size={20}
+                    strokeWidth={2}
+                  />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent className="bg-slate-900 text-white">
+                <p>Editar item</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <EditDialog
+            item={itemToEdit}
+            updateItem={(item) => updateItem(index, item)}
+            open={openEditDialog}
+            setOpen={setOpenEditDialog}
+          />
         </TableCell>
       </TableRow>
     ));
@@ -82,7 +168,7 @@ export const ItemsTable = ({ items, removeItem }: ItemsTableProps) => {
           <TableHead>Nome</TableHead>
           <TableHead>Qtde.</TableHead>
           <TableHead className="text-right">Valor</TableHead>
-          <TableHead className="text-center">Remover</TableHead>
+          <TableHead className="text-center">Ações</TableHead>
         </TableRow>
       </TableHeader>
 
