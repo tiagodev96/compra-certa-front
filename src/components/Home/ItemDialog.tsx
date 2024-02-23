@@ -55,9 +55,16 @@ export function ItemDialog({ addItem, open, setOpen }: ItemDialogProps) {
         </DialogDescription>
       </DialogHeader>
       <div className="grid gap-4 py-4">
-        {renderInput("name", name, setName, "Nome")}
-        {renderInput("amount", amount, setAmount, "Quantidade", "integer")}
-        {renderInput("price", price, setPrice, "Preço", "number")}
+        {renderInput("name", name, setName, "Nome", "text")}
+        {renderInput(
+          "amount",
+          amount,
+          setAmount,
+          "Quantidade",
+          "number",
+          "numeric"
+        )}
+        {renderInput("price", price, setPrice, "Preço", "number", "decimal")}
       </div>
       <DialogFooter>
         <Button type="submit" onClick={handleSubmit}>
@@ -67,12 +74,61 @@ export function ItemDialog({ addItem, open, setOpen }: ItemDialogProps) {
     </DialogContent>
   );
 
+  const handleInputChange =
+    (id: string, setValue: (value: string) => void, inputMode: string) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      let value = e.target.value;
+
+      if (inputMode === "numeric") {
+        value = value.replace(/[^0-9]/g, "");
+      } else if (inputMode === "decimal") {
+        value = value.replace(/[^0-9.]/g, "");
+
+        const parts = value.split(".");
+
+        if (parts.length > 1) {
+          parts[1] = parts[1].slice(0, 2);
+          value = parts.join(".");
+        }
+      }
+
+      setValue(value);
+    };
+
+  const handleKeyPress =
+    (inputMode: string) => (e: React.KeyboardEvent<HTMLInputElement>) => {
+      let exceptionKeys = [
+        "Backspace",
+        "Delete",
+        "ArrowLeft",
+        "ArrowRight",
+        "Enter",
+      ];
+
+      if (
+        inputMode === "numeric" &&
+        (e.key < "0" || e.key > "9" || !exceptionKeys.includes(e.key))
+      ) {
+        e.preventDefault();
+      }
+    };
+
   const renderInput = (
     id: string,
     value: string,
     setValue: (value: string) => void,
     label: string,
-    type: string = "text"
+    type: string = "text",
+    inputMode:
+      | "text"
+      | "search"
+      | "email"
+      | "tel"
+      | "url"
+      | "none"
+      | "numeric"
+      | "decimal"
+      | undefined = "text"
   ) => (
     <div className="grid grid-cols-4 items-center gap-4">
       <Label htmlFor={id} className="text-right">
@@ -82,24 +138,11 @@ export function ItemDialog({ addItem, open, setOpen }: ItemDialogProps) {
         id={id}
         type={type}
         value={value}
-        inputMode={
-          type === "number"
-            ? "decimal"
-            : type === "integer"
-              ? "numeric"
-              : "text"
-        }
-        onChange={(e) => {
-          const value = e.target.value;
-
-          if (type === "number" && isNaN(parseFloat(value))) {
-            return;
-          }
-
-          setValue(e.target.value);
-        }}
+        inputMode={inputMode}
+        onChange={handleInputChange(id, setValue, inputMode)}
         className="col-span-3 text-lg"
         required
+        onKeyDown={handleKeyPress(inputMode)}
       />
     </div>
   );
