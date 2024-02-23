@@ -95,24 +95,6 @@ export function ItemDialog({ addItem, open, setOpen }: ItemDialogProps) {
       setValue(value);
     };
 
-  const handleKeyPress =
-    (inputMode: string) => (e: React.KeyboardEvent<HTMLInputElement>) => {
-      let exceptionKeys = [
-        "Backspace",
-        "Delete",
-        "ArrowLeft",
-        "ArrowRight",
-        "Enter",
-      ];
-
-      if (
-        inputMode === "numeric" &&
-        (e.key < "0" || e.key > "9" || !exceptionKeys.includes(e.key))
-      ) {
-        e.preventDefault();
-      }
-    };
-
   const renderInput = (
     id: string,
     value: string,
@@ -142,7 +124,6 @@ export function ItemDialog({ addItem, open, setOpen }: ItemDialogProps) {
         onChange={handleInputChange(id, setValue, inputMode)}
         className="col-span-3 text-lg"
         required
-        onKeyDown={handleKeyPress(inputMode)}
       />
     </div>
   );
