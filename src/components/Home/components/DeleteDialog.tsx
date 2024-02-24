@@ -31,7 +31,7 @@ export const DeleteDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent>
+      <DialogContent className="max-w-[90%] sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Deseja realmente excluir o item?</DialogTitle>
         </DialogHeader>

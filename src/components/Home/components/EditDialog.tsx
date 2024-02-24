@@ -1,5 +1,6 @@
-"use client";
+// EditDialog.tsx
 import { Item } from "@/app/page";
+import { Show } from "@/components";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,8 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Edit2 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useItemDialog } from "@/hooks/useItemDialog";
 
 interface EditDialogProps {
   item: Item | null;
@@ -26,40 +26,17 @@ export function EditDialog({
   open,
   setOpen,
 }: EditDialogProps) {
-  const [name, setName] = useState("");
-  const [amount, setAmount] = useState("");
-  const [price, setPrice] = useState("");
-
-  useEffect(() => {
-    if (item) {
-      setName(item.name);
-      setAmount(item.amount.toString());
-      setPrice(item.value.toString());
-    }
-  }, [item]);
-
-  const handleSubmit = () => {
-    let formattedName = name.trim();
-    let formattedAmount = parseInt(amount);
-    let formattedPrice = parseFloat(price);
-
-    if (formattedName && formattedAmount && formattedPrice) {
-      updateItem({
-        name: formattedName,
-        amount: formattedAmount,
-        value: formattedPrice,
-      });
-    }
-
-    setOpen(false);
-  };
+  const { newItem, handleSubmit, handleInputChange, errors } = useItemDialog({
+    updateItem,
+    setOpen,
+    item,
+  });
 
   const renderInput = (
-    id: string,
-    value: string,
-    setValue: (value: string) => void,
+    id: keyof Item,
     label: string,
-    type: string = "text"
+    type: string = "text",
+    inputMode: "text" | "numeric" | "decimal" = "text"
   ) => (
     <div className="grid grid-cols-4 items-center gap-4">
       <Label htmlFor={id} className="text-right">
@@ -68,26 +45,20 @@ export function EditDialog({
       <Input
         id={id}
         type={type}
-        value={value}
-        inputMode={
-          type === "number"
-            ? "decimal"
-            : type === "integer"
-              ? "numeric"
-              : "text"
-        }
-        onChange={(e) => {
-          const value = e.target.value;
-
-          if (type === "number" && isNaN(parseFloat(value))) {
-            return;
-          }
-
-          setValue(e.target.value);
-        }}
-        className="col-span-3 text-lg"
+        value={newItem[id] as string}
+        inputMode={inputMode}
+        onChange={handleInputChange(id)}
+        className={`col-span-3 text-lg ${errors[id] ? "border-red-500" : ""}`}
         required
+        maxLength={id === "name" ? 25 : undefined}
       />
+      <Show>
+        <Show.When isTrue={!!errors}>
+          <p className="text-xs text-red-500 col-span-4 text-right mb-3 -mt-3">
+            {errors[id]}
+          </p>
+        </Show.When>
+      </Show>
     </div>
   );
 
@@ -98,12 +69,14 @@ export function EditDialog({
           <DialogTitle>Editar item</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          {renderInput("name", name, setName, "Nome")}
-          {renderInput("amount", amount, setAmount, "Quantidade", "integer")}
-          {renderInput("price", price, setPrice, "Preço", "number")}
+          {renderInput("name", "Nome")}
+          {renderInput("amount", "Quantidade", "number", "numeric")}
+          {renderInput("value", "Preço", "number", "decimal")}
         </div>
         <DialogFooter>
-          <Button onClick={handleSubmit}>Salvar</Button>
+          <Button type="submit" onClick={handleSubmit}>
+            Salvar
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

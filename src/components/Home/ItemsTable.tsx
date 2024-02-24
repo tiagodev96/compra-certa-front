@@ -163,7 +163,7 @@ export const ItemsTable = ({
 
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px] hidden sm:flex">Item</TableHead>
+          <TableHead className="w-[100px] hidden sm:table-cell">Item</TableHead>
           <TableHead>Nome</TableHead>
           <TableHead className="w-[100px]">Qtde.</TableHead>
           <TableHead className="text-right w-[100px]">Valor</TableHead>
