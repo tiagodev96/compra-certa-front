@@ -43,7 +43,7 @@ export function ItemDialog({ addItem, open, setOpen }: ItemDialogProps) {
         value={newItem[id] as string}
         inputMode={inputMode}
         onChange={handleInputChange(id)}
-        className="col-span-3 text-lg"
+        className={`col-span-3 text-lg ${errors[id] ? "border-red-500" : ""}`}
         required
         maxLength={id === "name" ? 25 : undefined}
       />
