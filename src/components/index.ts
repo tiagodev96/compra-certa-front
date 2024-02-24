@@ -1,6 +1,6 @@
 import { ItemsTable } from "./Home/ItemsTable";
-import { Header } from "./Home/Header";
 import { ItemDialog } from "./Home/ItemDialog";
 import { Show } from "./Show";
+import { Navbar } from "./Navbar";
 
-export { ItemsTable, Header, ItemDialog, Show };
+export { ItemsTable, ItemDialog, Show, Navbar };

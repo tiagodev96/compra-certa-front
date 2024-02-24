@@ -1,11 +1,11 @@
 "use client";
-import { Header, ItemDialog, ItemsTable } from "@/components";
+import { ItemDialog, ItemsTable } from "@/components";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { Plus } from "lucide-react";
-import { use, useState } from "react";
+import { useState } from "react";
 
 export interface Item {
   name: string;
@@ -58,9 +58,7 @@ export default function Home() {
 
   return (
     <main>
-      <Header />
-
-      <div className="container py-32 flex flex-col">
+      <div className="container py-32 flex flex-col bg-white dark:bg-black">
         <div className="flex justify-between items-center mb-5">
           <Card>
             <CardContent className="p-2 bg-slate-900 text-slate-100 rounded-md flex flex-row gap-x-2 justify-center items-center">

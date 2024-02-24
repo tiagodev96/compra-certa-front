@@ -1,4 +1,4 @@
-// ItemDialog.tsx
+"use client";
 import { Item } from "@/app/page";
 import { Button } from "@/components/ui/button";
 import {
