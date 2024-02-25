@@ -57,8 +57,8 @@ export default function Home() {
   const totalValueSum = calculateTotalValueSum(items);
 
   return (
-    <main>
-      <div className="container py-32 flex flex-col bg-white dark:bg-black">
+    <main className="bg-white dark:bg-neutral-900">
+      <div className="container py-32 flex flex-col">
         <div className="flex justify-between items-center mb-5">
           <Card>
             <CardContent className="p-2 bg-slate-900 text-slate-100 rounded-md flex flex-row gap-x-2 justify-center items-center">

@@ -14,16 +14,10 @@ export const Navbar = ({ className }: { className?: string }) => {
       )}
     >
       <Menu setActive={setActive}>
-        <HoveredLink
-          className="text-sm font-medium text-black dark:text-white"
-          href="/"
-        >
+        <HoveredLink className="text-sm font-medium" href="/">
           Início
         </HoveredLink>
-        <HoveredLink
-          className="text-sm font-medium text-black dark:text-white"
-          href="/history"
-        >
+        <HoveredLink className="text-sm font-medium" href="/history">
           Histórico
         </HoveredLink>
       </Menu>
