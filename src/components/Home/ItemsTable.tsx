@@ -44,7 +44,6 @@ export const ItemsTable = ({
     handleEditClick,
     openDeleteDialog,
     setOpenDeleteDialog,
-    itemToDelete,
     itemToEdit,
     openEditDialog,
     setOpenEditDialog,
@@ -80,7 +79,7 @@ export const ItemsTable = ({
     <TableRow>
       <TableCell
         colSpan={4}
-        className="text-center font-bold text-neutral-950 dark:text-neutral-50"
+        className="text-center tex-sm text-neutral-950 dark:text-neutral-50"
       >
         Nenhum item adicionado
       </TableCell>
