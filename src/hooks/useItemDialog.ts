@@ -68,9 +68,10 @@ export function useItemDialog({
   };
 
   const handleSubmit = () => {
-    setErrors({});
+    let errors = validateInputs(newItem);
+    setErrors(errors);
 
-    if (newItem.name && newItem.amount && newItem.value) {
+    if (Object.keys(errors).length === 0) {
       if (addItem) {
         addItem(newItem);
       }
@@ -82,9 +83,6 @@ export function useItemDialog({
 
       setNewItem({ name: "", amount: "", value: "" });
     }
-
-    let errors = validateInputs(newItem);
-    setErrors(errors);
   };
 
   const handleInputChange =

@@ -60,28 +60,34 @@ export const ItemsTable = ({
   const renderItems = () =>
     items.map((item, index) => (
       <TableRow key={index}>
-        <TableCell className="font-medium hidden sm:flex">
+        <TableCell className="font-medium text-sm text-neutral-900 dark:text-neutral-100 hidden sm:flex">
           {index + 1}
         </TableCell>
-        <TableCell>{item.name}</TableCell>
+        <TableCell className="font-medium text-sm text-neutral-900 dark:text-neutral-100">
+          {item.name}
+        </TableCell>
         <TableCell>
           <div className="flex flex-row space-x-2 sm:space-x-3">
             <button
-              className="bg-gray-900 hidden sm:flex text-white rounded-full"
-              onClick={() => handleAmountChange(index, -1)}
+              className="bg-neutral-900 dark:bg-neutral-100 hidden sm:flex text-neutral-100 dark:text-neutral-900 rounded-full transition-all hover:bg-primary hover:text-neutral-900 duration-300"
+              onClick={() => handleAmountChange(item, index, -1)}
             >
               <Minus size={24} strokeWidth={2} />
             </button>
-            <p>{item.amount}</p>
+            <p className="font-medium text-sm text-neutral-900 dark:text-neutral-100">
+              {item.amount}
+            </p>
             <button
-              className="bg-gray-900 text-white hidden sm:flex rounded-full"
-              onClick={() => handleAmountChange(index, 1)}
+              className="bg-neutral-900 dark:bg-neutral-100 text-neutral-100 dark:text-neutral-900 hidden sm:flex rounded-full transition-all hover:bg-primary hover:text-neutral-900 duration-300"
+              onClick={() => handleAmountChange(item, index, 1)}
             >
               <Plus size={24} strokeWidth={2} />
             </button>
           </div>
         </TableCell>
-        <TableCell className="text-right">{formatValue(item.value)}</TableCell>
+        <TableCell className="text-right font-medium text-sm text-neutral-900 dark:text-neutral-100">
+          {formatValue(item.value)}
+        </TableCell>
         <TableCell>
           <div className="flex flex-row items-center justify-center space-x-1 sm:space-x-2">
             <TooltipProvider>
@@ -92,13 +98,13 @@ export const ItemsTable = ({
                     onClick={() => handleDeleteClick(index)}
                   >
                     <Trash
-                      className="cursor-pointer hover:text-red-500 transition-all"
+                      className="cursor-pointer text-neutral-900 dark:text-neutral-100 hover:text-red-500 transition-all"
                       size={20}
                       strokeWidth={2}
                     />
                   </button>
                 </TooltipTrigger>
-                <TooltipContent className="bg-slate-900 text-white">
+                <TooltipContent className="bg-neutral-900 text-neutral-100 dark:bg-neutral-100 dark:text-neutral-900">
                   <p>Remover item</p>
                 </TooltipContent>
               </Tooltip>
@@ -109,7 +115,7 @@ export const ItemsTable = ({
                 <TooltipTrigger asChild>
                   <button onClick={() => handleEditClick(item, index)}>
                     <Pencil
-                      className="cursor-pointer hover:text-slate-500 transition-all"
+                      className="cursor-pointer text-neutral-900 dark:text-neutral-100 hover:text-primary transition-all"
                       size={20}
                       strokeWidth={2}
                     />
@@ -139,12 +145,9 @@ export const ItemsTable = ({
   return (
     <Table className="border-gray-200 border-[1px]">
       <TableCaption>
-        <div className="flex flex-row space-x-s justify-center">
+        <div className="flex flex-row space-x-s justify-center text-neutral-500">
           <p>Compras sob seu controle!</p>
-          <Separator
-            orientation="vertical"
-            className="h-100 w-[1px] bg-[#64748B]"
-          />
+          <Separator orientation="vertical" className="h-100 w-[1px] " />
           <p>&copy; Compra Certa</p>
         </div>
       </TableCaption>

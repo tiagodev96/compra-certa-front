@@ -17,13 +17,13 @@ const useItems = (
   const [itemToEdit, setItemToEdit] = useState<Item | null>(null);
   const [itemToEditIndex, setItemToEditIndex] = useState<number | null>(null);
 
-  const handleAmountChange = (index: number, delta: number) => {
-    const newAmount = parseInt(items[index].amount, 10) + delta;
+  const handleAmountChange = (item: Item, index: number, delta: number) => {
+    const newAmount = parseInt(item.amount, 10) + delta;
     if (newAmount === 0) {
       setOpenDeleteDialog(true);
       setItemToDelete(index);
     } else {
-      const newItem = { ...items[index], amount: newAmount.toString() };
+      const newItem = { ...item, amount: newAmount.toString() };
       updateItem(index, newItem);
     }
   };
