@@ -28,7 +28,7 @@ export function ItemInput({
     <div className="grid grid-cols-4 items-center gap-4">
       <Label
         htmlFor={id}
-        className="text-right text-neutral-900 dark:text-neutral-100"
+        className="text-right text-neutral-950 dark:text-neutral-50"
       >
         {label}
       </Label>
@@ -38,12 +38,10 @@ export function ItemInput({
         value={value}
         inputMode={inputMode}
         onChange={onChange(id)}
-        className={`col-span-3 placeholder:text-sm placeholder:text-neutral-500 text-neutral-900 dark:text-neutral-100 text-lg ${error ? "border-red-500" : ""}`}
+        className={`col-span-3 placeholder:text-sm placeholder:text-neutral-500 text-neutral-950 dark:text-neutral-50 text-lg ${error ? "border-red-500" : ""}`}
         required
         maxLength={id === "name" ? 25 : undefined}
-        placeholder={
-          id === "name" ? "Ex: Arroz, feijão, etc." : "Ex: 1, 2, 3, etc."
-        }
+        placeholder={id === "name" ? "Arroz, feijão, etc..." : "1"}
       />
       <Show>
         <Show.When isTrue={!!error}>

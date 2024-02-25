@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --beam-color: var(--neutral-700);
+}
+
+html.dark {
+  --beam-color: var(--neutral-50);
+}
+
 body {
   -webkit-font-smoothing: antialiased;
 }

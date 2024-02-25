@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 interface Item {
+  id: string;
   name: string;
   amount: string;
   value: string;
@@ -10,6 +11,7 @@ interface UseItemDialogProps {
   item: Item | null;
   addItem?: (item: Item) => void;
   updateItem?: (item: Item) => void;
+  deleteItem?: (item: Item) => void;
   setOpen: (open: boolean) => void;
 }
 
@@ -23,23 +25,31 @@ export function useItemDialog({
   item,
   addItem,
   updateItem,
+  deleteItem,
   setOpen,
 }: UseItemDialogProps) {
   const [newItem, setNewItem] = useState<Item>({
+    id: "",
     name: "",
     amount: "",
     value: "",
   });
   const [errors, setErrors] = useState<Partial<ItemErrors>>({});
 
-  // Update state when item changes
   useEffect(() => {
     if (item) {
       setNewItem(item);
     } else {
-      setNewItem({ name: "", amount: "", value: "" });
+      setNewItem({ id: "", name: "", amount: "", value: "" });
     }
   }, [item]);
+
+  const handleDelete = () => {
+    if (deleteItem) {
+      deleteItem(newItem);
+      setOpen(false);
+    }
+  };
 
   const validateInputs = (item: Item) => {
     let errors: Partial<ItemErrors> = {};
@@ -81,7 +91,7 @@ export function useItemDialog({
         setOpen(false);
       }
 
-      setNewItem({ name: "", amount: "", value: "" });
+      setNewItem({ id: "", name: "", amount: "", value: "" });
     }
   };
 
@@ -108,6 +118,7 @@ export function useItemDialog({
     setNewItem,
     handleSubmit,
     handleInputChange,
+    handleDelete,
     errors,
   };
 }

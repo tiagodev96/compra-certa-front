@@ -9,10 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useItemDialog } from "@/hooks/useItemDialog";
-import { Show } from "..";
 import { ItemInput } from "./ItemInput";
 
 interface ItemDialogProps {
@@ -32,7 +29,7 @@ export function ItemDialog({ addItem, open, setOpen }: ItemDialogProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="w-[90%] max-w-[425px] min-w-[300px]">
         <DialogHeader>
-          <DialogTitle className="text-neutral-900 dark:text-neutral-100">
+          <DialogTitle className="text-neutral-950 dark:text-neutral-50">
             Adicione um novo item
           </DialogTitle>
           <DialogDescription className="text-neutral-500">
@@ -44,6 +41,7 @@ export function ItemDialog({ addItem, open, setOpen }: ItemDialogProps) {
           <ItemInput
             id="name"
             label="Nome"
+            inputMode="text"
             value={newItem.name as string}
             onChange={handleInputChange}
             error={errors.name}

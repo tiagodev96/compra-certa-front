@@ -10,8 +10,8 @@ import {
 import React from "react";
 
 interface DeleteDialogProps {
-  removeItem: (index: number) => void;
-  index: number | null;
+  removeItem: (index: string) => void;
+  index: string | null;
   open: boolean;
   setOpen: (open: boolean) => void;
 }
@@ -33,20 +33,20 @@ export const DeleteDialog = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-[90%] sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle className="dark:text-neutral-100 text-neutral-900">
+          <DialogTitle className="dark:text-neutral-50 text-neutral-950">
             Deseja realmente excluir o item?
           </DialogTitle>
         </DialogHeader>
         <DialogFooter>
           <Button
-            className="bg-red-500 hover:bg-red-800 hover:text-neutral-100 text-neutral-100 transition-all"
+            className="bg-red-500 hover:bg-red-800 hover:text-neutral-50 text-neutral-50 transition-all"
             onClick={handleDelete}
           >
             Sim
           </Button>
 
           <Button
-            className="bg-gray-600 hover:bg-gray-300 hover:text-neutral-900 text-neutral-100 transition-all"
+            className="bg-gray-600 hover:bg-gray-300 hover:text-neutral-950 text-neutral-50 transition-all"
             onClick={() => setOpen(false)}
           >
             Não
