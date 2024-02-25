@@ -4,28 +4,30 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useItemDialog } from "@/hooks/useItemDialog";
-import { Show } from "..";
 import { ItemInput } from "./ItemInput";
 
-interface ItemDialogProps {
-  addItem: (item: Item) => void;
+interface EditDialogProps {
+  item: Item | null;
+  updateItem: (item: Item) => void;
   open: boolean;
   setOpen: (open: boolean) => void;
 }
 
-export function ItemDialog({ addItem, open, setOpen }: ItemDialogProps) {
+export function EditDialog({
+  item,
+  updateItem,
+  open,
+  setOpen,
+}: EditDialogProps) {
   const { newItem, handleSubmit, handleInputChange, errors } = useItemDialog({
-    addItem,
+    updateItem,
     setOpen,
-    item: null,
+    item,
   });
 
   return (
@@ -33,12 +35,8 @@ export function ItemDialog({ addItem, open, setOpen }: ItemDialogProps) {
       <DialogContent className="w-[90%] max-w-[425px] min-w-[300px]">
         <DialogHeader>
           <DialogTitle className="text-neutral-900 dark:text-neutral-100">
-            Adicione um novo item
+            Editar item
           </DialogTitle>
-          <DialogDescription className="text-neutral-500">
-            Você poderá remover o item ou alterar as quantidades e valores a
-            qualquer momento.
-          </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <ItemInput
@@ -53,7 +51,7 @@ export function ItemDialog({ addItem, open, setOpen }: ItemDialogProps) {
             label="Quantidade"
             type="number"
             inputMode="numeric"
-            value={String(newItem.amount)}
+            value={newItem.amount}
             onChange={handleInputChange}
             error={errors.amount}
           />
@@ -62,7 +60,7 @@ export function ItemDialog({ addItem, open, setOpen }: ItemDialogProps) {
             label="Preço"
             type="number"
             inputMode="decimal"
-            value={String(newItem.value)}
+            value={newItem.value}
             onChange={handleInputChange}
             error={errors.value}
           />

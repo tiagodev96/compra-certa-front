@@ -9,8 +9,8 @@ import { useState } from "react";
 
 export interface Item {
   name: string;
-  amount: number;
-  value: number;
+  amount: string;
+  value: string;
 }
 
 export default function Home() {
@@ -40,12 +40,17 @@ export default function Home() {
   };
 
   const calculateTotalValueSum = (items: Item[]) => {
-    return items.reduce((acc, item) => acc + item.value * item.amount, 0);
+    return items.reduce(
+      (acc, item) =>
+        acc +
+        parseFloat(item.value.replace(",", ".")) * parseInt(item.amount, 10),
+      0
+    );
   };
 
   const formatCurrencyValue = (value: number | string) => {
     if (typeof value === "string") {
-      value = parseFloat(value);
+      value = parseFloat(value.replace(",", "."));
     }
 
     return new Intl.NumberFormat("pt-BR", {
@@ -57,11 +62,11 @@ export default function Home() {
   const totalValueSum = calculateTotalValueSum(items);
 
   return (
-    <main className="bg-white dark:bg-neutral-900">
-      <div className="container py-32 flex flex-col">
+    <main className="bg-white dark:bg-neutral-900 min-h-screen">
+      <div className="sectionContainer">
         <div className="flex justify-between items-center mb-5">
           <Card>
-            <CardContent className="p-2 bg-slate-900 text-slate-100 rounded-md flex flex-row gap-x-2 justify-center items-center">
+            <CardContent className="p-2 bg-primary text-neutral-900 rounded-md flex flex-row gap-x-2 justify-center items-center">
               <h2 className="text-sm font-bold">Total</h2>
               <p className="text-sm font-bold">
                 {formatCurrencyValue(totalValueSum)}
@@ -69,8 +74,7 @@ export default function Home() {
             </CardContent>
           </Card>
           <Button
-            variant="ghost"
-            className="hidden sm:flex bg-green-400 hover:bg-green-200 hover:border-green-400 border-[1px] flex-row items-center gap-x-2"
+            className="hidden sm:flex border-[1px] flex-row items-center gap-x-2"
             onClick={() => setOpen(true)}
           >
             Adicionar Item <Plus size={18} />

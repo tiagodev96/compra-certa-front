@@ -5,3 +5,9 @@
 body {
   -webkit-font-smoothing: antialiased;
 }
+
+@layer components {
+  .sectionContainer {
+    @apply container pt-64 pb-10 flex flex-col;
+  }
+}

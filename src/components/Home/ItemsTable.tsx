@@ -12,7 +12,7 @@ import {
 import { Separator } from "../ui/separator";
 import { Minus, Pencil, Plus, Trash } from "lucide-react";
 import { Show } from "..";
-import { DeleteDialog } from "./components/DeleteDialog";
+import { DeleteDialog } from "./DeleteDialog";
 import { useState } from "react";
 import {
   Tooltip,
@@ -20,12 +20,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import { EditDialog } from "./components/EditDialog";
+import { EditDialog } from "./EditDialog";
+import useItems from "@/hooks/useItems";
 
 interface Item {
   name: string;
-  amount: number;
-  value: number;
+  amount: string;
+  value: string;
 }
 
 interface ItemsTableProps {
@@ -43,34 +44,18 @@ export const ItemsTable = ({
   formatValue,
   totalValueSum,
 }: ItemsTableProps) => {
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<number | null>(null);
-
-  const [openEditDialog, setOpenEditDialog] = useState(false);
-  const [itemToEdit, setItemToEdit] = useState<Item | null>(null);
-  const [itemToEditIndex, setItemToEditIndex] = useState<number | null>(null);
-
-  const handleAmountChange = (index: number, delta: number) => {
-    const newAmount = items[index].amount + delta;
-    if (newAmount === 0) {
-      setOpenDeleteDialog(true);
-      setItemToDelete(index);
-    } else {
-      const newItem = { ...items[index], amount: newAmount };
-      updateItem(index, newItem);
-    }
-  };
-
-  const handleDeleteClick = (index: number) => {
-    setItemToDelete(index);
-    setOpenDeleteDialog(true);
-  };
-
-  const handleEditClick = (index: number) => {
-    setItemToEdit(items[index]);
-    setItemToEditIndex(index);
-    setOpenEditDialog(true);
-  };
+  const {
+    handleAmountChange,
+    handleDeleteClick,
+    handleEditClick,
+    openDeleteDialog,
+    setOpenDeleteDialog,
+    itemToDelete,
+    itemToEdit,
+    itemToEditIndex,
+    openEditDialog,
+    setOpenEditDialog,
+  } = useItems(items, updateItem);
 
   const renderItems = () =>
     items.map((item, index) => (
@@ -122,7 +107,7 @@ export const ItemsTable = ({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <button onClick={() => handleEditClick(index)}>
+                  <button onClick={() => handleEditClick(item, index)}>
                     <Pencil
                       className="cursor-pointer hover:text-slate-500 transition-all"
                       size={20}
@@ -142,7 +127,10 @@ export const ItemsTable = ({
 
   const renderNoItems = () => (
     <TableRow>
-      <TableCell colSpan={5} className="text-center font-bold">
+      <TableCell
+        colSpan={5}
+        className="text-center font-bold text-neutral-900 dark:text-neutral-100"
+      >
         Nenhum item adicionado
       </TableCell>
     </TableRow>
@@ -180,10 +168,16 @@ export const ItemsTable = ({
 
       <TableFooter>
         <TableRow>
-          <TableCell colSpan={3} className="font-bold">
+          <TableCell
+            colSpan={3}
+            className="font-bold text-neutral-900 dark:text-neutral-100"
+          >
             Total
           </TableCell>
-          <TableCell colSpan={2} className="text-right font-bold">
+          <TableCell
+            colSpan={2}
+            className="text-right font-bold text-neutral-900 dark:text-neutral-100"
+          >
             {formatValue(totalValueSum)}
           </TableCell>
         </TableRow>

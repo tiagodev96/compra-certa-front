@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { Item } from "@/app/page";
+
+interface Item {
+  name: string;
+  amount: string;
+  value: string;
+}
 
 interface UseItemDialogProps {
   item: Item | null;
@@ -22,8 +27,8 @@ export function useItemDialog({
 }: UseItemDialogProps) {
   const [newItem, setNewItem] = useState<Item>({
     name: "",
-    amount: 0,
-    value: 0,
+    amount: "",
+    value: "",
   });
   const [errors, setErrors] = useState<Partial<ItemErrors>>({});
 
@@ -32,7 +37,7 @@ export function useItemDialog({
     if (item) {
       setNewItem(item);
     } else {
-      setNewItem({ name: "", amount: 0, value: 0 });
+      setNewItem({ name: "", amount: "", value: "" });
     }
   }, [item]);
 
@@ -43,29 +48,29 @@ export function useItemDialog({
       errors.name = "Campo obrigatório";
     }
 
-    if (item.amount <= 0) {
+    const amountAsNumber = parseInt(item.amount, 10);
+    if (amountAsNumber <= 0) {
       errors.amount = "Insira um número maior que zero";
-    } else if (isNaN(item.amount)) {
+    } else if (isNaN(amountAsNumber)) {
       errors.amount = "Campo obrigatório";
-    } else if (item.amount % 1 !== 0) {
+    } else if (amountAsNumber % 1 !== 0) {
       errors.amount = "Insira um número inteiro";
     }
 
-    if (item.value <= 0) {
+    const valueAsNumber = parseFloat(item.value.replace(",", "."));
+    if (valueAsNumber <= 0) {
       errors.value = "Insira um número maior que zero";
-    } else if (isNaN(item.value)) {
+    } else if (isNaN(valueAsNumber)) {
       errors.value = "Campo obrigatório";
     }
 
     return errors;
   };
 
-  // Call the appropriate function
   const handleSubmit = () => {
     setErrors({});
-    console.log(newItem);
 
-    if (newItem.name && newItem.amount > 0 && newItem.value > 0) {
+    if (newItem.name && newItem.amount && newItem.value) {
       if (addItem) {
         addItem(newItem);
       }
@@ -75,36 +80,29 @@ export function useItemDialog({
         setOpen(false);
       }
 
-      setNewItem({ name: "", amount: 0, value: 0 });
+      setNewItem({ name: "", amount: "", value: "" });
     }
 
     let errors = validateInputs(newItem);
     setErrors(errors);
   };
 
-  // Handle input change and ensure only valid characters are entered
   const handleInputChange =
-    (field: keyof Item) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      let value = e.target.value;
-
-      // Remove non-numeric characters
-      if (field === "amount") {
-        value = value.replace(/[^0-9]/g, "");
-      }
-
-      // Ensure only one decimal point
-      if (field === "value") {
-        const parts = value.split(".");
-        if (parts.length > 1) {
-          parts[1] = parts[1].slice(0, 2);
-          value = parts.join(".");
+    (id: keyof Item) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      let updatedItem = { ...newItem };
+      if (id === "amount") {
+        if (/^\d*$/.test(value)) {
+          updatedItem[id] = value;
         }
+      } else if (id === "value") {
+        if (/^\d*\.?\d{0,2}$/.test(value)) {
+          updatedItem[id] = value;
+        }
+      } else {
+        updatedItem[id] = value;
       }
-
-      setNewItem((prevItem) => ({
-        ...prevItem,
-        [field]: field === "name" ? value : parseFloat(value),
-      }));
+      setNewItem(updatedItem);
     };
 
   return {
