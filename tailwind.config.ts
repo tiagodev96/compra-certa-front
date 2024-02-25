@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config = {
-  darkMode: ["class"],
+  darkMode: "selector",
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -24,6 +24,9 @@ const config = {
       },
     },
     extend: {
+      colors: {
+        primary: "#FFC800",
+      },
       space: {
         xs: "0.5rem",
         s: "1rem",
