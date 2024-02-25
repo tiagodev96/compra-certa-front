@@ -23,9 +23,13 @@ export const DeleteDialog = ({
   setOpen,
 }: DeleteDialogProps) => {
   const handleDelete = () => {
+    console.log("out of if");
+    console.log("index", index);
     if (index !== null) {
+      console.log("inside if");
       removeItem(index);
     }
+    console.log("out of if - after");
     setOpen(false);
   };
 

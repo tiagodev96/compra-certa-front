@@ -11,7 +11,6 @@ import {
 import { useItemDialog } from "@/hooks/useItemDialog";
 import { ItemInput } from "./ItemInput";
 import { Trash } from "lucide-react";
-import useItems from "@/hooks/useItems";
 
 interface EditDialogProps {
   item: Item | null;
@@ -19,6 +18,7 @@ interface EditDialogProps {
   deleteItem: (item: Item) => void;
   open: boolean;
   setOpen: (open: boolean) => void;
+  setOpenDeleteDialog: (open: boolean) => void;
 }
 
 export function EditDialog({
@@ -27,16 +27,13 @@ export function EditDialog({
   deleteItem,
   open,
   setOpen,
+  setOpenDeleteDialog,
 }: EditDialogProps) {
   const { newItem, handleSubmit, handleInputChange, errors } = useItemDialog({
     updateItem,
     deleteItem,
     setOpen,
     item,
-  });
-
-  const { handleDeleteClick } = useItems({
-    initialItems: [],
   });
 
   return (
@@ -83,7 +80,8 @@ export function EditDialog({
             id={newItem.id}
             className="flex items-center bg-red-500 hover:border-red-500 border-[1px] group"
             onClick={() => {
-              handleDeleteClick(newItem.id);
+              setOpen(false);
+              setOpenDeleteDialog(true);
             }}
           >
             <Trash

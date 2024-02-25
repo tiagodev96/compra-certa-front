@@ -133,7 +133,7 @@ export const ItemsTable = ({
       <DeleteDialog
         open={openDeleteDialog}
         setOpen={setOpenDeleteDialog}
-        index={itemToDelete}
+        index={itemToEdit?.id || null}
         removeItem={removeItem}
       />
 
@@ -147,6 +147,7 @@ export const ItemsTable = ({
         }}
         open={openEditDialog}
         setOpen={setOpenEditDialog}
+        setOpenDeleteDialog={setOpenDeleteDialog}
       />
     </Table>
   );
