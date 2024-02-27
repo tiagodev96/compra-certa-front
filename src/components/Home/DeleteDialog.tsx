@@ -7,34 +7,26 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useDialogsStore } from "@/store";
 import React from "react";
 
-interface DeleteDialogProps {
-  removeItem: (index: string) => void;
-  index: string | null;
-  open: boolean;
-  setOpen: (open: boolean) => void;
-}
-
-export const DeleteDialog = ({
-  removeItem,
-  index,
-  open,
-  setOpen,
-}: DeleteDialogProps) => {
+export const DeleteDialog = () => {
   const handleDelete = () => {
-    console.log("out of if");
-    console.log("index", index);
-    if (index !== null) {
-      console.log("inside if");
-      removeItem(index);
-    }
-    console.log("out of if - after");
-    setOpen(false);
+    console.log(itemToDelete);
+    setOpenDeleteDialog(false);
   };
 
+  // * Stores
+  const [openDeleteDialog, setOpenDeleteDialog, itemToDelete] = useDialogsStore(
+    (state) => [
+      state.openDeleteDialog,
+      state.setOpenDeleteDialog,
+      state.itemToDelete,
+    ]
+  );
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog}>
       <DialogContent className="max-w-[90%] sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle className="dark:text-neutral-50 text-neutral-950">
@@ -51,7 +43,7 @@ export const DeleteDialog = ({
 
           <Button
             className="bg-gray-600 hover:bg-gray-300 hover:text-neutral-950 text-neutral-50 transition-all"
-            onClick={() => setOpen(false)}
+            onClick={() => setOpenDeleteDialog(false)}
           >
             Não
           </Button>

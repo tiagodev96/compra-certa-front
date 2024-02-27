@@ -10,51 +10,35 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Separator } from "../ui/separator";
-import { Minus, Plus } from "lucide-react";
 import { Show } from "..";
 import { DeleteDialog } from "./DeleteDialog";
 
 import { EditDialog } from "./EditDialog";
-import useItems from "@/hooks/useItems";
-import { useEffect } from "react";
-
-interface Item {
-  id: string;
-  name: string;
-  amount: string;
-  value: string;
-}
+import { useDialogsStore, useItemsStore } from "@/store";
 
 interface ItemsTableProps {
-  items: Item[];
-  removeItem: (index: string) => void;
-  updateItem: (item: Item) => void;
-  totalValueSum: number;
   formatValue: (value: number | string) => string;
 }
 
-export const ItemsTable = ({
-  items,
-  removeItem,
-  updateItem,
-  formatValue,
-  totalValueSum,
-}: ItemsTableProps) => {
-  const {
-    handleEditClick,
-    openDeleteDialog,
-    setOpenDeleteDialog,
-    itemToEdit,
-    openEditDialog,
-    setOpenEditDialog,
-  } = useItems({ initialItems: items });
+export const ItemsTable = ({ formatValue }: ItemsTableProps) => {
+  const [items, totalValue] = useItemsStore((state) => [
+    state.items,
+    state.totalValueSum,
+  ]);
+  const [setOpenEditDialog, setItemToDelete] = useDialogsStore((state) => [
+    state.setOpenEditDialog,
+    state.setItemToDelete,
+  ]);
 
   const renderItems = () =>
     items.map((item, index) => (
       <TableRow
         className="cursor-pointer"
-        key={index}
-        onClick={() => handleEditClick(item)}
+        key={item.id}
+        onClick={() => {
+          setOpenEditDialog(true, item);
+          setItemToDelete(item);
+        }}
       >
         <TableCell className="font-medium text-sm text-neutral-950 dark:text-neutral-50 hidden sm:flex">
           {index + 1}
@@ -124,30 +108,14 @@ export const ItemsTable = ({
             colSpan={2}
             className="text-right font-bold text-neutral-950 dark:text-neutral-50"
           >
-            {formatValue(totalValueSum)}
+            {formatValue(totalValue())}
           </TableCell>
         </TableRow>
       </TableFooter>
 
-      <DeleteDialog
-        open={openDeleteDialog}
-        setOpen={setOpenDeleteDialog}
-        index={itemToEdit?.id || null}
-        removeItem={removeItem}
-      />
+      <DeleteDialog />
 
-      <EditDialog
-        item={itemToEdit}
-        updateItem={(item) => {
-          updateItem(item);
-        }}
-        deleteItem={(item) => {
-          removeItem(item.id);
-        }}
-        open={openEditDialog}
-        setOpen={setOpenEditDialog}
-        setOpenDeleteDialog={setOpenDeleteDialog}
-      />
+      <EditDialog />
     </Table>
   );
 };

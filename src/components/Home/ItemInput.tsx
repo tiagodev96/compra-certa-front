@@ -1,5 +1,5 @@
 import { Show } from "@/components";
-import { Item } from "@/app/page";
+import { Item } from "@/app/(main)/page";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 

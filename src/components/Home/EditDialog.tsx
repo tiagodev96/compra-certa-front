@@ -1,5 +1,5 @@
 "use client";
-import { Item } from "@/app/page";
+import { Item } from "@/app/(main)/page";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,36 +8,78 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useItemDialog } from "@/hooks/useItemDialog";
 import { ItemInput } from "./ItemInput";
 import { Trash } from "lucide-react";
+import { useDialogsStore, useItemsStore } from "@/store";
+import { useState } from "react";
+import { validateInputs } from "./utils";
 
-interface EditDialogProps {
-  item: Item | null;
-  updateItem: (item: Item) => void;
-  deleteItem: (item: Item) => void;
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  setOpenDeleteDialog: (open: boolean) => void;
-}
+type ItemErrors = {
+  name?: string | undefined;
+  amount?: string | undefined;
+  value?: string | undefined;
+};
 
-export function EditDialog({
-  item,
-  updateItem,
-  deleteItem,
-  open,
-  setOpen,
-  setOpenDeleteDialog,
-}: EditDialogProps) {
-  const { newItem, handleSubmit, handleInputChange, errors } = useItemDialog({
-    updateItem,
-    deleteItem,
-    setOpen,
-    item,
-  });
+export function EditDialog() {
+  // * Stores
+  const [
+    openEditDialog,
+    setOpenEditDialog,
+    setOpenDeleteDialog,
+    itemToEdit,
+    setItemToEdit,
+    itemToDelete,
+    setItemToDelete,
+  ] = useDialogsStore((state) => [
+    state.openEditDialog,
+    state.setOpenEditDialog,
+    state.setOpenDeleteDialog,
+    state.itemToEdit,
+    state.setItemToEdit,
+    state.itemToDelete,
+    state.setItemToDelete,
+  ]);
+
+  const [updateItem] = useItemsStore((state) => [state.updateItem]);
+
+  // * States
+  const [errors, setErrors] = useState({ name: "", amount: "", value: "" });
+
+  // * Handlers
+  const handleSubmit = () => {
+    let errors: ItemErrors = validateInputs(itemToEdit as Item);
+    setErrors({
+      name: errors.name || "",
+      amount: errors.amount || "",
+      value: errors.value || "",
+    });
+
+    if (Object.keys(errors).length <= 0) {
+      updateItem(itemToEdit as Item);
+      setOpenEditDialog(false);
+    }
+  };
+
+  const handleInputChange =
+    (id: keyof Item) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      let updatedItem: Partial<Item> = { ...itemToEdit };
+      if (id === "amount") {
+        if (/^\d*$/.test(value)) {
+          updatedItem[id] = value;
+        }
+      } else if (id === "value") {
+        if (/^\d*\.?\d{0,2}$/.test(value)) {
+          updatedItem[id] = value;
+        }
+      } else if (id === "name") {
+        updatedItem[id] = value;
+      }
+      setItemToEdit(updatedItem as Item);
+    };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={openEditDialog} onOpenChange={setOpenEditDialog}>
       <DialogContent className="w-[90%] max-w-[425px] min-w-[300px]">
         <DialogHeader>
           <DialogTitle className="text-neutral-950 dark:text-neutral-50">
@@ -49,7 +91,7 @@ export function EditDialog({
             id="name"
             label="Nome"
             inputMode="text"
-            value={newItem.name as string}
+            value={itemToEdit?.name ?? ""}
             onChange={handleInputChange}
             error={errors.name}
           />
@@ -58,7 +100,7 @@ export function EditDialog({
             label="Quantidade"
             type="number"
             inputMode="numeric"
-            value={newItem.amount}
+            value={itemToEdit?.amount ?? ""}
             onChange={handleInputChange}
             error={errors.amount}
           />
@@ -67,7 +109,7 @@ export function EditDialog({
             label="Preço"
             type="number"
             inputMode="decimal"
-            value={newItem.value}
+            value={itemToEdit?.value ?? ""}
             onChange={handleInputChange}
             error={errors.value}
           />
@@ -77,10 +119,10 @@ export function EditDialog({
             Salvar
           </Button>
           <Button
-            id={newItem.id}
+            id={itemToEdit?.id}
             className="flex items-center bg-red-500 hover:border-red-500 border-[1px] group"
             onClick={() => {
-              setOpen(false);
+              setOpenEditDialog(false);
               setOpenDeleteDialog(true);
             }}
           >

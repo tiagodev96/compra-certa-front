@@ -19,10 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body className={inter.className}>
-        <Navbar />
-        <>{children}</>
-      </body>
+      <body className={inter.className}>{children}</body>
       <Script id="theme-definition">
         {`
           if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
