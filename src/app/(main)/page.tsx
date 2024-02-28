@@ -3,10 +3,8 @@ import { GridBackground, ItemDialog, ItemsTable } from "@/components";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Toaster } from "@/components/ui/toaster";
-import { useToast } from "@/components/ui/use-toast";
 import { useDialogsStore, useItemsStore } from "@/store";
 import { Plus } from "lucide-react";
-import { useState } from "react";
 
 export interface Item {
   id: string;
@@ -16,36 +14,11 @@ export interface Item {
 }
 
 export default function Home() {
-  const [items, setItems] = useState<Item[]>([]);
-  const { toast } = useToast();
-
-  const [itemsZt, totalValueZt] = useItemsStore((state) => [
-    state.items,
-    state.totalValueSum,
-  ]);
+  const [totalValue] = useItemsStore((state) => [state.totalValueSum]);
 
   const [setOpenAddDialog] = useDialogsStore((state) => [
     state.setOpenAddDialog,
   ]);
-
-  const handleRemoveItem = (index: string) => {
-    setItems((prev) => prev.filter((item) => item.id !== index));
-
-    const itemName = items.find((item) => item.id === index)?.name || "";
-    const itemFormatted = itemName.charAt(0).toUpperCase() + itemName.slice(1);
-
-    toast({
-      description: `${itemFormatted} removido com sucesso!`,
-      variant: "success",
-      duration: 2000,
-    });
-  };
-
-  const handleUpdateItem = (newItem: Item) => {
-    setItems((prev) =>
-      prev.map((item) => (item.id === newItem.id ? newItem : item))
-    );
-  };
 
   const formatCurrencyValue = (value: string | number) => {
     if (typeof value === "string") {
@@ -67,7 +40,7 @@ export default function Home() {
               <CardContent className="p-2 bg-primary text-neutral-950 rounded-md flex flex-row gap-x-2 justify-center items-center">
                 <h2 className="text-sm font-bold">Total</h2>
                 <p className="text-sm font-bold">
-                  {formatCurrencyValue(totalValueZt())}
+                  {formatCurrencyValue(totalValue())}
                 </p>
               </CardContent>
             </Card>

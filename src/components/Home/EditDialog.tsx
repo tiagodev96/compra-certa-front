@@ -28,7 +28,6 @@ export function EditDialog() {
     setOpenDeleteDialog,
     itemToEdit,
     setItemToEdit,
-    itemToDelete,
     setItemToDelete,
   ] = useDialogsStore((state) => [
     state.openEditDialog,
@@ -36,7 +35,6 @@ export function EditDialog() {
     state.setOpenDeleteDialog,
     state.itemToEdit,
     state.setItemToEdit,
-    state.itemToDelete,
     state.setItemToDelete,
   ]);
 
