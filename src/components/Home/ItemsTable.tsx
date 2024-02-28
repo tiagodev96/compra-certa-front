@@ -32,7 +32,7 @@ export const ItemsTable = ({ formatValue }: ItemsTableProps) => {
   const renderItems = () =>
     items.map((item, index) => (
       <TableRow
-        className="cursor-pointer"
+        className={`cursor-pointer ${index % 2 === 0 ? "dark:bg-neutral-800 bg-neutral-300" : "dark:bg-neutral-900 bg-neutral-200"} `}
         key={item.id}
         onClick={() => {
           setOpenEditDialog(true, item);
