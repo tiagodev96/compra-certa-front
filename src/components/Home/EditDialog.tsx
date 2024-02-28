@@ -78,7 +78,10 @@ export function EditDialog() {
 
   return (
     <Dialog open={openEditDialog} onOpenChange={setOpenEditDialog}>
-      <DialogContent className="w-[90%] max-w-[425px] min-w-[300px]">
+      <DialogContent
+        onOpenAutoFocus={(e: Event) => e.preventDefault()}
+        className="w-[90%] max-w-[425px] min-w-[300px]"
+      >
         <DialogHeader>
           <DialogTitle className="text-neutral-950 dark:text-neutral-50">
             Editar item

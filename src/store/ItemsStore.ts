@@ -18,7 +18,6 @@ type Store = {
 
 export const useItemsStore = create<Store>((set, get) => ({
   items: [],
-
   totalValueSum: () => {
     const items = get().items;
     return items.reduce(
@@ -33,8 +32,9 @@ export const useItemsStore = create<Store>((set, get) => ({
     set((state) => ({
       items: state.items.map((i) => (i.id === item.id ? item : i)),
     })),
-  removeItem: (item: Item) =>
+  removeItem: (item: Item) => {
     set((state) => ({
       items: state.items.filter((i) => i.id !== item.id),
-    })),
+    }));
+  },
 }));

@@ -34,7 +34,7 @@ export default function Home() {
   return (
     <main className="bg-neutral-50 dark:bg-neutral-950 min-h-screen relative z-10">
       <GridBackground>
-        <div className="sectionContainer max-w-[90%]">
+        <div className="sectionContainer py-48">
           <div className="flex z-10 justify-between items-center mb-5">
             <Card>
               <CardContent className="p-2 bg-primary text-neutral-950 rounded-md flex flex-row gap-x-2 justify-center items-center">

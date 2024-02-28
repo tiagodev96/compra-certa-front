@@ -9,8 +9,11 @@ import {
 } from "@/components/ui/dialog";
 import { useDialogsStore, useItemsStore } from "@/store";
 import React from "react";
+import { useToast } from "../ui/use-toast";
 
 export const DeleteDialog = () => {
+  const { toast } = useToast();
+
   // * Stores
   const [openDeleteDialog, setOpenDeleteDialog, itemToDelete] = useDialogsStore(
     (state) => [
@@ -25,6 +28,10 @@ export const DeleteDialog = () => {
   const handleDelete = () => {
     if (itemToDelete) {
       removeItem(itemToDelete);
+      toast({
+        description: `${itemToDelete.name} removido com sucesso!`,
+        duration: 1500,
+      });
     }
     setOpenDeleteDialog(false);
   };
