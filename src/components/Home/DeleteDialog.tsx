@@ -7,15 +7,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useDialogsStore } from "@/store";
+import { useDialogsStore, useItemsStore } from "@/store";
 import React from "react";
 
 export const DeleteDialog = () => {
-  const handleDelete = () => {
-    console.log(itemToDelete);
-    setOpenDeleteDialog(false);
-  };
-
   // * Stores
   const [openDeleteDialog, setOpenDeleteDialog, itemToDelete] = useDialogsStore(
     (state) => [
@@ -24,6 +19,15 @@ export const DeleteDialog = () => {
       state.itemToDelete,
     ]
   );
+
+  const [removeItem] = useItemsStore((state) => [state.removeItem]);
+
+  const handleDelete = () => {
+    if (itemToDelete) {
+      removeItem(itemToDelete);
+    }
+    setOpenDeleteDialog(false);
+  };
 
   return (
     <Dialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog}>

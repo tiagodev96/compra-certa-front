@@ -124,6 +124,7 @@ export function EditDialog() {
             onClick={() => {
               setOpenEditDialog(false);
               setOpenDeleteDialog(true);
+              setItemToDelete(itemToEdit as Item);
             }}
           >
             <Trash

@@ -25,9 +25,8 @@ export const ItemsTable = ({ formatValue }: ItemsTableProps) => {
     state.items,
     state.totalValueSum,
   ]);
-  const [setOpenEditDialog, setItemToDelete] = useDialogsStore((state) => [
+  const [setOpenEditDialog] = useDialogsStore((state) => [
     state.setOpenEditDialog,
-    state.setItemToDelete,
   ]);
 
   const renderItems = () =>
@@ -37,7 +36,6 @@ export const ItemsTable = ({ formatValue }: ItemsTableProps) => {
         key={item.id}
         onClick={() => {
           setOpenEditDialog(true, item);
-          setItemToDelete(item);
         }}
       >
         <TableCell className="font-medium text-sm text-neutral-950 dark:text-neutral-50 hidden sm:flex">
