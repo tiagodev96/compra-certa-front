@@ -11,7 +11,7 @@ import {
 import { ItemInput } from "./ItemInput";
 import { Trash } from "lucide-react";
 import { useDialogsStore, useItemsStore } from "@/store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { validateInputs } from "./utils";
 
 type ItemErrors = {
@@ -42,6 +42,10 @@ export function EditDialog() {
 
   // * States
   const [errors, setErrors] = useState({ name: "", amount: "", value: "" });
+
+  useEffect(() => {
+    setErrors({ name: "", amount: "", value: "" });
+  }, [openEditDialog]);
 
   // * Handlers
   const handleSubmit = () => {

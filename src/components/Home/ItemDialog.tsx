@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ItemInput } from "./ItemInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDialogsStore, useItemsStore } from "@/store";
 import { validateInputs } from "./utils";
 
@@ -39,6 +39,10 @@ export function ItemDialog() {
   const [newItem, setNewItem] = useState<NewItemProps>(initialItem);
 
   const [errors, setErrors] = useState<Partial<NewItemProps>>({});
+
+  useEffect(() => {
+    setErrors({});
+  }, [open]);
 
   const handleInputChange =
     (id: keyof Item) => (e: React.ChangeEvent<HTMLInputElement>) => {
