@@ -3,17 +3,13 @@ import { useState } from "react";
 import { HoveredLink, Menu } from "./ui/aceternity/navbar-menu";
 import { cn } from "@/utils/cn";
 import Image from "next/image";
+import { SwitchTheme } from ".";
 
 export const Navbar = ({ className }: { className?: string }) => {
   const [active, setActive] = useState<string | null>(null);
 
   return (
-    <div
-      className={cn(
-        "fixed top-10 inset-x-0 max-w-[350px] mx-auto z-50",
-        className
-      )}
-    >
+    <div className={cn("fixed top-10 inset-x-0 w-fit mx-auto z-50", className)}>
       <Menu setActive={setActive}>
         <div className="flex items-center gap-x-6">
           <HoveredLink href="/">
@@ -38,6 +34,8 @@ export const Navbar = ({ className }: { className?: string }) => {
               <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-primary  to-transparent h-px" />
             </div>
           </HoveredLink>
+
+          <SwitchTheme />
         </div>
       </Menu>
     </div>
