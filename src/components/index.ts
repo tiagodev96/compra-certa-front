@@ -5,6 +5,7 @@ import { Navbar } from "./Navbar";
 import { GridBackground } from "./GridBackground";
 import { LoginHeader } from "./Auth/LoginHeader";
 import { SwitchTheme } from "./SwitchTheme";
+import { SignInCTA } from "./Auth/SignInCTA";
 
 export {
   ItemsTable,
@@ -14,4 +15,5 @@ export {
   GridBackground,
   LoginHeader,
   SwitchTheme,
+  SignInCTA,
 };

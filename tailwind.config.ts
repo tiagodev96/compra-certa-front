@@ -33,6 +33,7 @@ const config = {
     extend: {
       colors: {
         primary: "#FFC800",
+        primaryHover: "#d19200",
       },
       space: {
         xs: "0.5rem",

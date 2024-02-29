@@ -34,10 +34,10 @@ export default function Home() {
   return (
     <main className="bg-neutral-50 dark:bg-neutral-950 min-h-screen relative z-10">
       <GridBackground>
-        <div className="sectionContainer py-48">
+        <div className="sectionContainer py-48 z-20">
           <div className="flex z-10 justify-between items-center mb-5">
             <Card>
-              <CardContent className="p-2 bg-primary text-neutral-950 rounded-md flex flex-row gap-x-2 justify-center items-center">
+              <CardContent className="p-2 bg-primary hover:bg-primaryHover transition-all cursor-default text-neutral-950 rounded-md flex flex-row gap-x-2 justify-center items-center">
                 <h2 className="text-sm font-bold">Total</h2>
                 <p className="text-sm font-bold">
                   {formatCurrencyValue(totalValue())}
