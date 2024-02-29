@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components";
 import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,10 +21,21 @@ export default function RootLayout({
       <body className={inter.className}>{children}</body>
       <Script id="theme-definition">
         {`
-          if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark')
+          let theme = localStorage.getItem('theme');
+          if (theme) {
+            if (theme === 'dark') {
+              document.documentElement.classList.add('dark');
+            } else {
+              document.documentElement.classList.remove('dark');
+            }
           } else {
-            document.documentElement.classList.remove('dark')
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+              localStorage.setItem('theme', 'dark');
+              document.documentElement.classList.add('dark');
+            } else {
+              localStorage.setItem('theme', 'light');
+              document.documentElement.classList.remove('dark');
+            }
           }
         `}
       </Script>
