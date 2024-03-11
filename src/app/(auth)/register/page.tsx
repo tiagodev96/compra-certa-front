@@ -16,7 +16,8 @@ import { ReloadIcon } from '@radix-ui/react-icons';
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -46,7 +47,7 @@ const Register = () => {
 
   return (
     <div className='sectionContainer flex items-center justify-center w-screen h-screen'>
-      <div className='grid grid-cols-1 md:grid-cols-2 max-w-[1200px] container h-[100%] items-center justify-center max-h-[700px] rounded-lg drop-shadow-2xl'>
+      <div className='grid grid-cols-1 md:grid-cols-2 max-w-[1200px] container h-[100%] items-center justify-center max-h-[800px] rounded-lg drop-shadow-2xl'>
         <div className='bg-neutral-800 dark:bg-neutral-200  w-full h-full rounded-tl-lg rounded-bl-lg'></div>
         <div className=' h-full overflow-hidden w-full rounded-tr-lg rounded-br-lg'>
           <GridBackground>
@@ -64,12 +65,21 @@ const Register = () => {
                   <form onSubmit={(e) => e.preventDefault()}>
                     <div className='grid w-full items-center gap-4'>
                       <div className='flex flex-col space-y-3'>
-                        <Label htmlFor='name'>Nome</Label>
+                        <Label htmlFor='name'>Primeiro nome</Label>
                         <Input
-                          id='name'
+                          id='firstName'
                           type='text'
-                          name='name'
-                          value={formData.name}
+                          name='firstName'
+                          value={formData.firstName}
+                          onChange={handleInputChange}
+                          placeholder='Digite seu nome'
+                        />
+                        <Label htmlFor='name'>Sobrenome</Label>
+                        <Input
+                          id='lastName'
+                          type='text'
+                          name='lastName'
+                          value={formData.lastName}
                           onChange={handleInputChange}
                           placeholder='Digite seu nome'
                         />

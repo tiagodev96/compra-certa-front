@@ -2,16 +2,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { GridBackground, LoginHeader } from '@/components';
-import { Button } from '@/components/ui/button';
-import {
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import ChangePasswordForm from '@/components/Auth/ChangePasswordForm';
 import SuccessPasswordChange from '@/components/Auth/SuccessPasswordChange';
