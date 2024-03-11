@@ -5,6 +5,15 @@ import { cn } from "@/utils/cn";
 import Image from "next/image";
 import { SwitchTheme } from ".";
 import { AvatarIcon } from "@radix-ui/react-icons";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 
 export const Navbar = ({ className }: { className?: string }) => {
   const [active, setActive] = useState<string | null>(null);
@@ -34,17 +43,24 @@ export const Navbar = ({ className }: { className?: string }) => {
             </span>
           </HoveredLink>
 
-          {isLoggedIn ? ( 
-            <>
-              <AvatarIcon /> 
-              <button onClick={handleLogout} className="text-sm font-medium relative text-neutral-950 dark:text-neutral-50 px-4 hover:bg-primary hover:text-neutral-950 transition py-2 rounded-full">
-                Logout
-                <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-primary  to-transparent h-px" />
-              </button>
-            </>
-          ) : ( 
-            <HoveredLink href="/login">
-              <div className="border text-sm font-medium relative border-neutral-300 dark:border-neutral-600 dark:border-white/[0.2] text-neutral-950 dark:text-neutral-50 px-4 hover:bg-primary hover:text-neutral-950 transition py-2 rounded-full">
+          {isLoggedIn ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <AvatarIcon className='h-auto w-10 cursor-pointer' />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className='w-56'>
+                <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem onClick={handleLogout}>
+                    Sair
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <HoveredLink href='/login'>
+              <div className='border text-sm font-medium relative border-neutral-300 dark:border-neutral-600 dark:border-white/[0.2] text-neutral-950 dark:text-neutral-50 px-4 hover:bg-primary hover:text-neutral-950 transition py-2 rounded-full'>
                 <span>Login</span>
                 <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-primary  to-transparent h-px" />
               </div>
